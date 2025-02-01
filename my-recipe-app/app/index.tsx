@@ -1,15 +1,15 @@
-import { Text, View } from "react-native";
+import "react-native-gesture-handler";
+import { registerRootComponent } from "expo";
+import { NavigationContainer } from "@react-navigation/native";
+import AuthNavigator from "./_layout";  // ✅ Import the AuthNavigator
 
-export default function Index() {
-  return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
-    </View>
-  );
-}
+// ✅ Only ONE NavigationContainer at the root
+const App = () => {
+    return (
+        <NavigationContainer>
+            <AuthNavigator />
+        </NavigationContainer>
+    );
+};
+
+registerRootComponent(App);
