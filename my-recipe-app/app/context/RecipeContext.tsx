@@ -4,33 +4,35 @@ import React, { createContext, useState, useContext, ReactNode } from "react";
 const RecipeContext = createContext<any>(null);
 
 interface RecipeProviderProps {
-  children: ReactNode;
-}
-
-interface Recipe {
-  name: string;
-  ingredients: string[];
-  instructions: string[];
+  children: ReactNode; // ✅ This explicitly types children
 }
 
 export const RecipeProvider: React.FC<RecipeProviderProps> = ({ children }) => {
-  //const [recipes, setRecipes] = useState<any[]>([]);
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [recipes, setRecipes] = useState<any[]>([]); // Stores fetched recipes
+  const [loading, setLoading] = useState(false); // Track loading state
 
-
-  // Fetch recipes from backend
-  const fetchRecipes = async () => {
+  // Function to fetch recipes from backend
+  const fetchRecipes = async (
+    ingredients: string, 
+    time_limit: number, 
+    preferences: string, 
+    cuisines: string
+  ) => {
     setLoading(true);
     try {
-      const response = await fetch("https://accessible-ai-recipe-production.up.railway.app/get_recipe?ingredients=${ingredients}&time_limit=${time_limit}&preferences=${preferences}&cuisines=${cuisines}");
+      const response = await fetch(
+        `https://accessible-ai-recipe-production.up.railway.app/get_recipe?ingredients=${ingredients}&time_limit=${time_limit}&preferences=${preferences}&cuisines=${cuisines}`
+      );
+  
+      console.log("Raw Response:", response); // Check if response is valid
+  
       const data = await response.json();
-
-      console.log("Fetched Recipes:", data); // Debugging output
+      console.log("Parsed Data:", data);
+  
       if (data.recipes) {
         setRecipes(data.recipes);
       } else {
-        console.error("No recipes found:", data);
+        console.error("Failed to fetch recipes:", data.error || "No recipes found");
       }
     } catch (error) {
       console.error("Error fetching recipes:", error);
@@ -38,6 +40,7 @@ export const RecipeProvider: React.FC<RecipeProviderProps> = ({ children }) => {
       setLoading(false);
     }
   };
+  
 
   return (
     <RecipeContext.Provider value={{ recipes, fetchRecipes, loading }}>
@@ -50,5 +53,3 @@ export const RecipeProvider: React.FC<RecipeProviderProps> = ({ children }) => {
 export const useRecipe = () => {
   return useContext(RecipeContext);
 };
-
-export default RecipeProvider;
