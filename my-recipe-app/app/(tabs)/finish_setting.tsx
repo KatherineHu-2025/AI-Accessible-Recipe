@@ -4,15 +4,13 @@ import { Button } from "react-native-paper";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { AuthStackParamList } from "../_layout";  // ✅ Import navigation types
 
+
 type FinishSettingScreenProps = NativeStackScreenProps<AuthStackParamList, "FinishSetting">;
 
 const FinishSettingScreen: React.FC<FinishSettingScreenProps> = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.safeContainer}>
       <View style={styles.container}>
-        {/* Header message */}
-        <Text style={styles.header}>USER SPECIALIZED SETTINGS</Text>
-        <Text style={styles.subheader}>We’ll keep them in mind for your cooking experience.</Text>
 
         <Text style={styles.title}>Start Cooking?</Text>
 
@@ -22,8 +20,8 @@ const FinishSettingScreen: React.FC<FinishSettingScreenProps> = ({ navigation })
             Not Yet
           </Button>
 
-          <Button mode="contained" style={styles.startButton} onPress={() => console.log("Start Cooking!")}>
-            Start Cooking!
+          <Button mode="contained" style={styles.startButton} onPress={() => console.log("Start!")}>
+            Start!
           </Button>
         </View>
       </View>
@@ -36,7 +34,7 @@ const FinishSettingScreen: React.FC<FinishSettingScreenProps> = ({ navigation })
 const styles = StyleSheet.create({
   safeContainer: {
     flex: 1,
-    backgroundColor: "#FFF",
+    backgroundColor: "#F9F9F9",
   },
   container: {
     flex: 1,
