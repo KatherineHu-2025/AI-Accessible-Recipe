@@ -36,6 +36,15 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "5c8e8d09-0fa5-4c0f-b806-af185b4ec6f6"
+      }
+    },
+    "owner": "katherinehu"
   }
 }
