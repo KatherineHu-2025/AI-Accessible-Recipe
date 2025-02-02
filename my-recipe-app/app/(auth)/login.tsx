@@ -18,6 +18,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
         try {
             await signInWithEmailAndPassword(auth, email, password);
             Alert.alert("Success", "Logged in successfully!");
+            navigation.navigate("CookingEquipment"); 
         } catch (error) {
             Alert.alert("Error", (error as Error).message);
         }
