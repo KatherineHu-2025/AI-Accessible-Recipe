@@ -33,10 +33,10 @@ const SignupScreen: React.FC<SignupScreenProps> = ({ navigation }) => {
                 <View style={styles.inner}>
                     <Text style={styles.title}>SIGN UP</Text>
 
-                    <Text style={styles.label}>Create Username:</Text>
+                    <Text style={styles.label}>Input Email:</Text>
                     <TextInput 
                         style={styles.input} 
-                        placeholder="Set username" 
+                        placeholder="Set email" 
                         placeholderTextColor="#888" 
                         value={email} 
                         onChangeText={setEmail} 
