@@ -93,7 +93,7 @@ const StartCookingScreen: React.FC<StartCookingScreenProps> = ({ navigation }) =
             {/* Submit Button */}
             <TouchableOpacity
               style={styles.button}
-              onPress={() => console.log("Navigate to Cuisine")}
+              onPress={() => console.log("Create Cuisine!")}
             >
               <Text style={styles.buttonText}>Get My Recipes!</Text>
             </TouchableOpacity>
