@@ -62,14 +62,14 @@ const globalStyles = StyleSheet.create({
     paddingVertical: 10,
   },
   input: {
-    width: "100%",
+    flex: 1, // Makes input take up remaining space
     height: 50,
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 10,
     paddingHorizontal: 15,
     backgroundColor: "#F5F5F5",
-    marginBottom: 15,
+    marginBottom: 0, // Remove extra bottom margin for better alignment
   },
   notYetButton: {
     borderColor: "gray",
@@ -84,6 +84,21 @@ const globalStyles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
     flex: 1,
+  },
+  // Added styles for the "Customize" section
+  customAllergyContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between", // Ensures spacing
+    marginTop: 10,
+  },
+  addButton: {
+    height: 50, // Match input field height
+    paddingHorizontal: 20,
+    backgroundColor: "black",
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 
