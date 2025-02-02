@@ -16,10 +16,12 @@ import Checkbox from "expo-checkbox";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { AuthStackParamList } from "../_layout";  
+import { useRecipe } from "../context/RecipeContext"; 
 
 type StartCookingScreenProps = NativeStackScreenProps<AuthStackParamList, "StartCooking">;
 
 const StartCookingScreen: React.FC<StartCookingScreenProps> = ({ navigation }) => {
+  const { fetchRecipes } = useRecipe();
   const [selectedPreferences, setSelectedPreferences] = useState<string[]>([]);
   const [selectedCuisines, setSelectedCuisines] = useState<string[]>([]);
   const [customPreference, setCustomPreference] = useState("");
@@ -93,9 +95,17 @@ const StartCookingScreen: React.FC<StartCookingScreenProps> = ({ navigation }) =
             {/* Submit Button */}
             <TouchableOpacity
               style={styles.button}
-              onPress={() => console.log("Create Cuisine!")}
+              onPress={() => {
+                console.log("Fetching recipes...");
+                fetchRecipes();  // ✅ Fetch recipes from backend
+                navigation.navigate("RecipeResults"); // ✅ Navigate after fetching
+              }}
             >
               <Text style={styles.buttonText}>Get My Recipes!</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => navigation.navigate("CookingEquipment")} style={styles.backToEditingContainer}>
+              <Text style={styles.backToEditing}>Back to Editing</Text>
             </TouchableOpacity>
           </ScrollView>
         </SafeAreaView>
@@ -172,6 +182,17 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 18,
     fontWeight: "bold",
+  },
+  backToEditingContainer: {
+    flex: 1, 
+    justifyContent: "center", // Centers it vertically
+    alignItems: "center", // Centers it horizontally
+    marginTop: 20, // Adds spacing above
+  },
+  backToEditing: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#000",
   },
 });
 

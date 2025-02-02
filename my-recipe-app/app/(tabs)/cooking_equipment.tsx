@@ -90,6 +90,10 @@ const CookingEquipmentScreen: React.FC<CookingEquipmentScreenProps> = ({ navigat
         </ScrollView>
 
         <View style={globalStyles.buttonContainer}>
+          <TouchableOpacity onPress={() => navigation.navigate("StartCooking")}>
+            <Text style={globalStyles.skipAllText}>Skip All</Text>
+          </TouchableOpacity>
+
           <Button mode="outlined" style={globalStyles.skipButton} onPress={() => navigation.goBack()}>
             Previous
           </Button>

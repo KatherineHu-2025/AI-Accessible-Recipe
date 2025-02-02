@@ -50,6 +50,19 @@ const globalStyles = StyleSheet.create({
     alignItems: "center",
     marginTop: 10,
   },
+  skipAllText: {
+    fontSize: 16,
+    color: "black",
+    textDecorationLine: "underline",
+  },
+  BackToEditing: {
+    flexDirection: "row",
+    fontSize: 16,
+    color: "black",
+    textDecorationLine: "underline",
+    alignItems: "center",
+    paddingVertical: 10,
+  },
   skipButton: {
     borderColor: "gray",
     borderWidth: 1,

@@ -9,6 +9,8 @@ import SeasoningSettings from "./(tabs)/seasoning";
 import FinishSettingScreen from "./(tabs)/finish_setting";  
 import FridgePage from "./(tabs)/fridgePage";
 import StartCookingScreen from "./(tabs)/start_cooking";
+import { RecipeProvider } from "./context/RecipeContext"; 
+import RecipeResultsScreen from "./(tabs)/recipeResults"
 
 export type AuthStackParamList = {
     Login: undefined;
@@ -19,22 +21,27 @@ export type AuthStackParamList = {
     FinishSetting: undefined;
     FridgePage: undefined;
     StartCooking:undefined;
+    RecipeProvider:undefined;
+    RecipeResults: undefined;
 };
 
 const Stack = createStackNavigator<AuthStackParamList>();
 
 const AuthNavigator = () => {
     return (
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen name="Signup" component={SignupScreen} />
-            <Stack.Screen name="CookingEquipment" component={CookingEquipmentScreen} />
-            <Stack.Screen name="DietaryPreference" component={DietaryPreferenceScreen} />  
-            <Stack.Screen name="Seasoning" component={SeasoningSettings} />
-            <Stack.Screen name="FinishSetting" component={FinishSettingScreen} />
-            <Stack.Screen name="FridgePage" component={FridgePage} />
-            <Stack.Screen name="StartCooking" component={StartCookingScreen} />
-        </Stack.Navigator>
+        <RecipeProvider>
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="Login" component={LoginScreen} />
+                <Stack.Screen name="Signup" component={SignupScreen} />
+                <Stack.Screen name="CookingEquipment" component={CookingEquipmentScreen} />
+                <Stack.Screen name="DietaryPreference" component={DietaryPreferenceScreen} />  
+                <Stack.Screen name="Seasoning" component={SeasoningSettings} />
+                <Stack.Screen name="FinishSetting" component={FinishSettingScreen} />
+                <Stack.Screen name="FridgePage" component={FridgePage} />
+                <Stack.Screen name="StartCooking" component={StartCookingScreen} />
+                <Stack.Screen name="RecipeResults" component={RecipeResultsScreen} />
+            </Stack.Navigator>
+        </RecipeProvider>
     );
 };
 
