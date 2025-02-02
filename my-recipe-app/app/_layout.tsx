@@ -10,7 +10,9 @@ import FinishSettingScreen from "./(tabs)/finish_setting";
 import FridgePage from "./(tabs)/fridgePage";
 import StartCookingScreen from "./(tabs)/start_cooking";
 import { RecipeProvider } from "./context/RecipeContext"; 
-import RecipeResultsScreen from "./(tabs)/recipeResults"
+import RecipeResultsScreen from "./(tabs)/recipeResults";
+import RecipeDetailScreen from "./(tabs)/recipeDetail";  // ✅ Import new detail screen
+
 
 export type AuthStackParamList = {
     Login: undefined;
@@ -23,6 +25,7 @@ export type AuthStackParamList = {
     StartCooking:undefined;
     RecipeProvider:undefined;
     RecipeResults: undefined;
+    RecipeDetail: { recipe: { name: string; ingredients: string[]; instructions: string[] } }; // ✅ Add RecipeDetail
 };
 
 const Stack = createStackNavigator<AuthStackParamList>();
@@ -40,6 +43,7 @@ const AuthNavigator = () => {
                 <Stack.Screen name="FridgePage" component={FridgePage} />
                 <Stack.Screen name="StartCooking" component={StartCookingScreen} />
                 <Stack.Screen name="RecipeResults" component={RecipeResultsScreen} />
+                <Stack.Screen name="RecipeDetail" component={RecipeDetailScreen} /> 
             </Stack.Navigator>
         </RecipeProvider>
     );
