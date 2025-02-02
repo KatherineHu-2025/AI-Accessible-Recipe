@@ -50,13 +50,26 @@ export const RecipeProvider: React.FC<{ children: ReactNode }> = ({ children }) 
       console.log("User Data from Firestore:", userData); // testing
       
       const requestBody = {
-        ingredients: userData.fridgeItems || [],
+        // ✅ Keep `selectedTags` structure intact (with true/false values)
+        selectedTags: userData.selectedTags || {},
+    
         time_limit: userData.cookingPreferences?.includes("Short Cooking Time ⏰") ? 20 : 40,
-        preferences: [...(userData.dietaryPreferences || []), ...(userData.allergies || [])],
-        cuisines: userData.preferredCuisines || [],
-        cooking_equipment: userData.cookingEquipment || [],
-        seasonings: userData.seasonings || []
-      };
+    
+        preferences: [
+            ...(Array.isArray(userData.dietaryPreferences) ? userData.dietaryPreferences : []),
+            ...(Array.isArray(userData.allergies) ? userData.allergies : [])
+        ],
+    
+        cuisines: Array.isArray(userData.preferredCuisines) ? userData.preferredCuisines : [],
+        cooking_equipment: Array.isArray(userData.cookingEquipment) ? userData.cookingEquipment : [],
+        seasonings: Array.isArray(userData.seasonings) ? userData.seasonings : []
+    };
+    
+    // 🔹 Debugging Logs
+    console.log("🔹 User Data from Firestore:", userData);
+    console.log("🔹 Sending to Backend:", JSON.stringify(requestBody, null, 2)); // ✅ Logs full request body
+    
+    
 
       console.log("Sending to backend:", requestBody);
 
