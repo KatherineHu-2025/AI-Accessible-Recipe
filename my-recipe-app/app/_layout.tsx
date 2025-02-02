@@ -5,7 +5,8 @@ import LoginScreen from "./(auth)/login";  // ✅ Keep parentheses
 import SignupScreen from "./(auth)/signup";  // ✅ Keep parentheses
 import CookingEquipmentScreen from "./(tabs)/cooking_equipment";  // ✅ Keep parentheses
 import DietaryPreferenceScreen from "./(tabs)/dietary_preference";  
-import SeasoningSettings from "./(tabs)/seasoning";  
+import SeasoningSettings from "./(tabs)/seasoning"; 
+import FinishSettingScreen from "./(tabs)/finish_setting";  
 
 export type AuthStackParamList = {
     Login: undefined;
@@ -13,6 +14,7 @@ export type AuthStackParamList = {
     CookingEquipment: undefined;
     DietaryPreference: undefined; 
     Seasoning: undefined;  
+    FinishSetting: undefined;
 };
 
 const Stack = createStackNavigator<AuthStackParamList>();
@@ -25,6 +27,7 @@ const AuthNavigator = () => {
             <Stack.Screen name="CookingEquipment" component={CookingEquipmentScreen} />
             <Stack.Screen name="DietaryPreference" component={DietaryPreferenceScreen} />  
             <Stack.Screen name="Seasoning" component={SeasoningSettings} />
+            <Stack.Screen name="FinishSetting" component={FinishSettingScreen} />
         </Stack.Navigator>
     );
 };

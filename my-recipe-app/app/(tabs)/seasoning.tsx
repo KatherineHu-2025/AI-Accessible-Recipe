@@ -1,15 +1,13 @@
 import React, { useState } from "react";
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity, SafeAreaView } from "react-native";
-import Checkbox from "expo-checkbox";  // ✅ Use expo-checkbox to match cooking_equipment.tsx
+import { View, Text, ScrollView, StyleSheet, SafeAreaView, TouchableOpacity } from "react-native";
+import Checkbox from "expo-checkbox";
 import { Button } from "react-native-paper";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { AuthStackParamList } from "../_layout";  // ✅ Import navigation types
+import { AuthStackParamList } from "../_layout";  
 
 type SeasoningScreenProps = NativeStackScreenProps<AuthStackParamList, "Seasoning">;
 
 const SeasoningScreen: React.FC<SeasoningScreenProps> = ({ navigation }) => {
-  const [selectedItems, setSelectedItems] = useState<string[]>([]);
-
   const seasoningList = [
     "Salt", "Black Pepper", "Sugar", "Garlic Powder", "Onion Powder",
     "Chili Powder", "Cinnamon", "Oregano", "Basil", "Red Pepper Flakes",
@@ -19,6 +17,9 @@ const SeasoningScreen: React.FC<SeasoningScreenProps> = ({ navigation }) => {
     "Ketchup", "Mustard", "Mayonnaise", "Soy Sauce", "Hot Sauce",
     "Barbecue Sauce", "Vinegar", "Honey",
   ];
+
+  // ✅ Set all checkboxes as selected by default
+  const [selectedItems, setSelectedItems] = useState<string[]>([...seasoningList, ...condimentList]);
 
   const toggleCheckbox = (item: string) => {
     setSelectedItems((prevSelected) =>
@@ -34,8 +35,9 @@ const SeasoningScreen: React.FC<SeasoningScreenProps> = ({ navigation }) => {
         <Text style={styles.header}>USER SPECIALIZED SETTINGS</Text>
         <Text style={styles.subheader}>We will give you specialized cooking advice based on your condition.</Text>
 
-        <Text style={styles.title}>What seasonings do you have?</Text>
-        <ScrollView style={styles.scrollView}>
+        {/* ✅ Make both questions move within ScrollView */}
+        <ScrollView contentContainerStyle={styles.scrollView}>
+          <Text style={styles.title}>What seasonings do you have?</Text>
           {seasoningList.map((item, index) => (
             <View key={index} style={styles.checkboxContainer}>
               <Checkbox
@@ -47,7 +49,8 @@ const SeasoningScreen: React.FC<SeasoningScreenProps> = ({ navigation }) => {
             </View>
           ))}
 
-          <Text style={styles.title}>What condiments/sauces do you have?</Text>
+          {/* ✅ Added extra margin for better spacing */}
+          <Text style={[styles.title, styles.extraMarginTop]}>What condiments/sauces do you have?</Text>
           {condimentList.map((item, index) => (
             <View key={index} style={styles.checkboxContainer}>
               <Checkbox
@@ -61,12 +64,8 @@ const SeasoningScreen: React.FC<SeasoningScreenProps> = ({ navigation }) => {
         </ScrollView>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={() => setSelectedItems([])}>
-            <Text style={styles.skipAllText}>Skip All</Text>
-          </TouchableOpacity>
-
           <Button mode="outlined" style={styles.skipButton} onPress={() => navigation.goBack()}>
-            Skip
+            Previous
           </Button>
 
           <Button mode="contained" style={styles.nextButton} onPress={() => navigation.navigate("DietaryPreference")}>
@@ -77,6 +76,7 @@ const SeasoningScreen: React.FC<SeasoningScreenProps> = ({ navigation }) => {
     </SafeAreaView>
   );
 };
+
 
 const styles = StyleSheet.create({
   safeContainer: {
@@ -106,9 +106,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 20,
   },
+  extraMarginTop: {
+    marginTop: 20, // ✅ Adds extra margin for "What condiments/sauces do you have?"
+  },
   scrollView: {
-    marginBottom: 20,
     paddingHorizontal: 5,
+    paddingBottom: 20, // Ensures scrolling is smooth and allows space at bottom
   },
   checkboxContainer: {
     flexDirection: "row",
@@ -123,7 +126,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 30,
+    // marginBottom: 30,
   },
   skipAllText: {
     fontSize: 16,
@@ -142,4 +145,5 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
 });
+
 export default SeasoningScreen;

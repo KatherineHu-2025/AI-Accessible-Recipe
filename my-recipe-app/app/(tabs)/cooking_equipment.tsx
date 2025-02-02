@@ -1,21 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, SafeAreaView } from "react-native";
-import Checkbox from "expo-checkbox"; 
+import Checkbox from "expo-checkbox";
 import { Button } from "react-native-paper";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { AuthStackParamList } from "../_layout";  // ✅ Import navigation types
+import { AuthStackParamList } from "../_layout";  
+import { auth } from "../../firebaseConfig";  // ✅ Import Firebase authentication
 
 type CookingEquipmentScreenProps = NativeStackScreenProps<AuthStackParamList, "CookingEquipment">;
 
-// ✅ Define navigation props correctly
 const CookingEquipmentScreen: React.FC<CookingEquipmentScreenProps> = ({ navigation }) => {
-  const [selectedItems, setSelectedItems] = useState<string[]>([]);
-
   const equipmentList = [
-    "FryingPan", "Saucepan", "Stockpot", "Wok", "Oven",
-    "Air fryer", "Pizza Oven", "Microwave", "Barbecue Grills",
+    "Frying Pan", "Saucepan", "Stockpot", "Wok", "Oven",
+    "Air Fryer", "Pizza Oven", "Microwave", "Barbecue Grills",
   ];
 
+  // ✅ Set all checkboxes as selected by default
+  const [selectedItems, setSelectedItems] = useState<string[]>(equipmentList);
+
+  // ✅ Store and display the user's email username
+  const [username, setUsername] = useState("User");
+
+  useEffect(() => {
+    const currentUser = auth.currentUser;
+    if (currentUser?.email) {
+      const emailUsername = currentUser.email.split("@")[0]; // Extract username from email
+      setUsername(emailUsername);
+    }
+  }, []);
+
+  // ✅ Toggle checkbox selection
   const toggleCheckbox = (item: string) => {
     setSelectedItems((prevSelected) =>
       prevSelected.includes(item)
@@ -30,7 +43,8 @@ const CookingEquipmentScreen: React.FC<CookingEquipmentScreenProps> = ({ navigat
         <Text style={styles.header}>USER SPECIALIZED SETTINGS</Text>
         <Text style={styles.subheader}>We will give you specialized cooking advice based on your condition.</Text>
 
-        <Text style={styles.title}>Welcome, Username! What cooking equipment do you have?</Text>
+        {/* ✅ Dynamically insert username */}
+        <Text style={styles.title}>Welcome, {username}! What cooking equipment do you have?</Text>
 
         <ScrollView style={styles.scrollView}>
           {equipmentList.map((item, index) => (
@@ -46,12 +60,9 @@ const CookingEquipmentScreen: React.FC<CookingEquipmentScreenProps> = ({ navigat
         </ScrollView>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={() => setSelectedItems([])}>
-            <Text style={styles.skipAllText}>Skip All</Text>
-          </TouchableOpacity>
 
           <Button mode="outlined" style={styles.skipButton} onPress={() => navigation.goBack()}>
-            Skip
+            Previous
           </Button>
 
           <Button mode="contained" style={styles.nextButton} onPress={() => navigation.navigate("Seasoning")}>
@@ -63,15 +74,16 @@ const CookingEquipmentScreen: React.FC<CookingEquipmentScreenProps> = ({ navigat
   );
 };
 
+
 const styles = StyleSheet.create({
   safeContainer: {
     flex: 1,
-    backgroundColor: "#FFF",
+    backgroundColor: "#F9F9F9",
   },
   container: {
     flex: 1,
     paddingHorizontal: 20,
-    paddingTop: 30, // Increased to avoid overlap with notch
+    paddingTop: 30, // Matches previous screens
     backgroundColor: "#F9F9F9",
   },
   header: {
@@ -84,12 +96,12 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: "gray",
     marginBottom: 10,
-    lineHeight: 18, // Increased line height for better readability
+    lineHeight: 18,
   },
   title: {
     fontSize: 22,
     fontWeight: "bold",
-    marginBottom: 20, // Increased spacing for clarity
+    marginBottom: 20,
   },
   scrollView: {
     marginBottom: 20,
@@ -98,17 +110,17 @@ const styles = StyleSheet.create({
   checkboxContainer: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 5, // Added padding between checkboxes
+    paddingVertical: 5,
   },
   checkboxLabel: {
-    fontSize: 18, // Increased font size for readability
+    fontSize: 18,
     marginLeft: 10,
   },
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 30, // Ensure buttons don't get too close to the bottom
+    // marginBottom: 30,
   },
   skipAllText: {
     fontSize: 16,
