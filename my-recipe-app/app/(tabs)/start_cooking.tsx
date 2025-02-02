@@ -16,10 +16,12 @@ import Checkbox from "expo-checkbox";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { AuthStackParamList } from "../_layout";  
+import { useRecipe } from "../context/RecipeContext"; 
 
 type StartCookingScreenProps = NativeStackScreenProps<AuthStackParamList, "StartCooking">;
 
 const StartCookingScreen: React.FC<StartCookingScreenProps> = ({ navigation }) => {
+  const { fetchRecipes } = useRecipe();
   const [selectedPreferences, setSelectedPreferences] = useState<string[]>([]);
   const [selectedCuisines, setSelectedCuisines] = useState<string[]>([]);
   const [customPreference, setCustomPreference] = useState("");
@@ -93,7 +95,11 @@ const StartCookingScreen: React.FC<StartCookingScreenProps> = ({ navigation }) =
             {/* Submit Button */}
             <TouchableOpacity
               style={styles.button}
-              onPress={() => console.log("Create Cuisine!")}
+              onPress={() => {
+                console.log("Fetching recipes...");
+                fetchRecipes();  // ✅ Fetch recipes from backend
+                navigation.navigate("RecipeResults"); // ✅ Navigate after fetching
+              }}
             >
               <Text style={styles.buttonText}>Get My Recipes!</Text>
             </TouchableOpacity>

@@ -1,46 +1,91 @@
 import React, { createContext, useState, useContext, ReactNode } from "react";
+import { auth, db } from "../../firebaseConfig";  // Import Firebase
+import { doc, getDoc } from "firebase/firestore";
 
-// Create the RecipeContext
-const RecipeContext = createContext<any>(null);
-
-interface RecipeProviderProps {
-  children: ReactNode; // ✅ This explicitly types children
+// Define Recipe type for better type safety
+interface Recipe {
+  name: string;
+  ingredients: string[];
+  instructions: string[];
 }
 
-export const RecipeProvider: React.FC<RecipeProviderProps> = ({ children }) => {
-  const [recipes, setRecipes] = useState<any[]>([]); // Stores fetched recipes
-  const [loading, setLoading] = useState(false); // Track loading state
+// Define Context type
+interface RecipeContextType {
+  recipes: Recipe[];
+  fetchRecipes: () => Promise<void>;
+  loading: boolean;
+}
 
-  // Function to fetch recipes from backend
-  const fetchRecipes = async (
-    ingredients: string, 
-    time_limit: number, 
-    preferences: string, 
-    cuisines: string
-  ) => {
+// Create the RecipeContext with a proper type
+const RecipeContext = createContext<RecipeContextType | null>(null);
+
+export const RecipeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  // Fetch Recipes from Backend using User Data from Firebase
+  const fetchRecipes = async () => {
     setLoading(true);
+    
     try {
+      const currentUser = auth.currentUser;
+      if (!currentUser) {
+        console.error("User not authenticated");
+        setLoading(false);
+        return;
+      }
+
+      // 🔹 Fetch user data from Firestore
+      const userDocRef = doc(db, "users", currentUser.uid);
+      const userDoc = await getDoc(userDocRef);
+
+      if (!userDoc.exists()) {
+        console.error("User data not found!");
+        setLoading(false);
+        return;
+      }
+
+      // 🔹 Extract user data
+      const userData = userDoc.data();
+      console.log("User Data from Firestore:", userData); // testing
+      
+      const requestBody = {
+        ingredients: userData.fridgeItems || [],
+        time_limit: userData.cookingPreferences?.includes("Short Cooking Time ⏰") ? 20 : 40,
+        preferences: [...(userData.dietaryPreferences || []), ...(userData.allergies || [])],
+        cuisines: userData.preferredCuisines || [],
+        cooking_equipment: userData.cookingEquipment || [],
+        seasonings: userData.seasonings || []
+      };
+
+      console.log("Sending to backend:", requestBody);
+
+      // 🔹 Send a POST request with JSON body
       const response = await fetch(
-        `https://accessible-ai-recipe-production.up.railway.app/get_recipe?ingredients=${ingredients}&time_limit=${time_limit}&preferences=${preferences}&cuisines=${cuisines}`
+        "https://accessible-ai-recipe-production.up.railway.app/get_recipe",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(requestBody),
+        }
       );
-  
-      console.log("Raw Response:", response); // Check if response is valid
-  
+
       const data = await response.json();
-      console.log("Parsed Data:", data);
-  
+
+      console.log("Backend Response:", data);
+
       if (data.recipes) {
         setRecipes(data.recipes);
       } else {
         console.error("Failed to fetch recipes:", data.error || "No recipes found");
       }
+
     } catch (error) {
       console.error("Error fetching recipes:", error);
     } finally {
       setLoading(false);
     }
   };
-  
 
   return (
     <RecipeContext.Provider value={{ recipes, fetchRecipes, loading }}>
@@ -51,5 +96,9 @@ export const RecipeProvider: React.FC<RecipeProviderProps> = ({ children }) => {
 
 // Custom Hook to use RecipeContext
 export const useRecipe = () => {
-  return useContext(RecipeContext);
+  const context = useContext(RecipeContext);
+  if (!context) {
+    throw new Error("useRecipe must be used within a RecipeProvider");
+  }
+  return context;
 };
