@@ -20,7 +20,7 @@ const FinishSettingScreen: React.FC<FinishSettingScreenProps> = ({ navigation })
             Not Yet
           </Button>
 
-          <Button mode="contained" style={styles.startButton} onPress={() => console.log("Start!")}>
+          <Button mode="contained" style={styles.startButton} onPress={() => navigation.navigate("StartCooking")}>
             Start!
           </Button>
         </View>

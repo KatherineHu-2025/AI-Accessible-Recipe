@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, ScrollView, SafeAreaView } from "react-native";
+import { View, Text, ScrollView, SafeAreaView, TouchableOpacity } from "react-native";
 import Checkbox from "expo-checkbox";
 import { Button } from "react-native-paper";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -59,22 +59,34 @@ const CookingEquipmentScreen: React.FC<CookingEquipmentScreenProps> = ({ navigat
         <Text style={globalStyles.title}>Welcome, {username}! What cooking equipment do you have?</Text>
 
         <ScrollView style={globalStyles.scrollView}>
-          {equipmentList.map((item, index) => (
-            <View key={index} style={globalStyles.checkboxContainer}>
-              <Checkbox
-                value={selectedItems.includes(item)}
-                onValueChange={() => {
-                  setSelectedItems((prevSelected) =>
-                    prevSelected.includes(item)
-                      ? prevSelected.filter((i) => i !== item)
-                      : [...prevSelected, item]
-                  );
-                }}
-                color={selectedItems.includes(item) ? "#000" : undefined}
-              />
-              <Text style={globalStyles.checkboxLabel}>{item}</Text>
-            </View>
-          ))}
+        {equipmentList.map((item, index) => (
+        <TouchableOpacity 
+          key={index} 
+          style={globalStyles.checkboxContainer} 
+          onPress={() => {
+            setSelectedItems((prevSelected) =>
+              prevSelected.includes(item)
+                ? prevSelected.filter((i) => i !== item)
+                : [...prevSelected, item]
+            );
+          }}
+          activeOpacity={0.7} // Provides slight feedback when tapped
+        >
+          <Checkbox
+            value={selectedItems.includes(item)}
+            onValueChange={() => {
+              setSelectedItems((prevSelected) =>
+                prevSelected.includes(item)
+                  ? prevSelected.filter((i) => i !== item)
+                  : [...prevSelected, item]
+              );
+            }}
+            color={selectedItems.includes(item) ? "#000" : undefined}
+          />
+          <Text style={globalStyles.checkboxLabel}>{item}</Text>
+        </TouchableOpacity>
+      ))}
+
         </ScrollView>
 
         <View style={globalStyles.buttonContainer}>

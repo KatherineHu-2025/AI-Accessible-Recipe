@@ -65,31 +65,43 @@ const SeasoningScreen: React.FC<SeasoningScreenProps> = ({ navigation }) => {
         <Text style={globalStyles.subheader}>We will give you specialized cooking advice based on your condition.</Text>
 
         <ScrollView style={globalStyles.scrollView}>
-          <Text style={globalStyles.title}>What seasonings do you have?</Text>
-          {seasoningList.map((item, index) => (
-            <View key={index} style={globalStyles.checkboxContainer}>
-              <Checkbox
+        {/* Seasonings Section */}
+        <Text style={globalStyles.title}>What seasonings do you have?</Text>
+        {seasoningList.map((item, index) => (
+            <TouchableOpacity 
+            key={index} 
+            style={globalStyles.checkboxContainer} 
+            onPress={() => toggleCheckbox(item)}
+            activeOpacity={0.7} // Provides slight feedback when tapped
+            >
+            <Checkbox
                 value={selectedItems.includes(item)}
                 onValueChange={() => toggleCheckbox(item)}
                 color={selectedItems.includes(item) ? "#000" : undefined}
-              />
-              <Text style={globalStyles.checkboxLabel}>{item}</Text>
-            </View>
-          ))}
+            />
+            <Text style={globalStyles.checkboxLabel}>{item}</Text>
+            </TouchableOpacity>
+        ))}
 
-          {/* ✅ Added extra margin for better spacing */}
-          <Text style={[globalStyles.title, globalStyles.extraMarginTop]}>What condiments/sauces do you have?</Text>
-          {condimentList.map((item, index) => (
-            <View key={index} style={globalStyles.checkboxContainer}>
-              <Checkbox
+        {/* Condiments Section */}
+        <Text style={[globalStyles.title, globalStyles.extraMarginTop]}>What condiments/sauces do you have?</Text>
+        {condimentList.map((item, index) => (
+            <TouchableOpacity 
+            key={index} 
+            style={globalStyles.checkboxContainer} 
+            onPress={() => toggleCheckbox(item)}
+            activeOpacity={0.7} // Provides slight feedback when tapped
+            >
+            <Checkbox
                 value={selectedItems.includes(item)}
                 onValueChange={() => toggleCheckbox(item)}
                 color={selectedItems.includes(item) ? "#000" : undefined}
-              />
-              <Text style={globalStyles.checkboxLabel}>{item}</Text>
-            </View>
-          ))}
+            />
+            <Text style={globalStyles.checkboxLabel}>{item}</Text>
+            </TouchableOpacity>
+        ))}
         </ScrollView>
+
 
         <View style={globalStyles.buttonContainer}>
           <Button mode="outlined" style={globalStyles.skipButton} onPress={() => navigation.goBack()}>
